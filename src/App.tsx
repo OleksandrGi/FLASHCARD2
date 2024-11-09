@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './app.css';
-import { languageEnglish, languageGerman, languageRussian } from './words';
+import { CategoriesType, Category, languageEnglish, languageGerman, languageRussian } from './words';
 import Button from "@mui/material/Button";
 import { AppBar, Box, IconButton, MenuItem, TextField, Toolbar, Typography } from '@mui/material';
 import Select from '@mui/material/Select';
@@ -16,11 +16,12 @@ import QuizPage from './pages/QuizPage';
 import Navigation from './components/nsvigation';
 import HomePage from './pages/HomePage';
 
-
 export type CardsType = {
   id: number;
   word: string;
   translate: string;
+  learned: boolean;
+  category: string;
 };
 export type Keytype = {
   [key: number]: boolean;
@@ -29,11 +30,15 @@ export type Keytype = {
 export type LanguageKey = 'English' | 'German' | 'Russian';
 
 function App() {
-  const [cards, setCards] = useState<Array<CardsType>>([]);
+  const [cards, setCards] = useState<Array<CardsType>>([
+   
+  ]);
   const [newWord, setNewWord] = useState<string>('');
   const [sourceLanguage, setSourceLanguage] = useState<LanguageKey>('English');
   const [targetLanguage, setTargetLanguage] = useState<LanguageKey>('Russian');
+  const [newCardCategory, setNewCardCategory] = useState<string>('Basic'); 
   const [showTranslate, setShowTranslate] = useState<Keytype>({});
+  const [AppBarT, setAppBarT] = useState<boolean>(false);
 
   const languageMap: Record<LanguageKey, { words: { id: number; word: string }[] }[]> = {
     English: languageEnglish,
@@ -63,6 +68,8 @@ function App() {
       id: cards.length + 1,
       word: newWord,
       translate: translation,
+      learned: true,
+      category: newCardCategory
     };
     setCards([...cards, newCard]);
     setNewWord('');
@@ -75,12 +82,16 @@ function App() {
     }));
   };
 
+  function changeTarget() {
+    setAppBarT((state) => !state);
+  }
+
   return (
     <BrowserRouter>
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
           <Toolbar>
-            <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+            <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={changeTarget}>
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
@@ -91,38 +102,33 @@ function App() {
         </AppBar>
       </Box>
 
-  <Navigation/>
-      {/* Маршрутизация */}
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <HomePage/>
-          }
-        />
-       
-        <Route path="/AddFlashCardsPage" element={<AddFlashCardsPage 
-        setSourceLanguage={setSourceLanguage}
-        setTargetLanguage={setTargetLanguage}
-        handleAddWord={handleAddWord}
-        newWord={newWord}
-        setNewWord={setNewWord}
-        sourceLanguage={sourceLanguage}
-        targetLanguage={targetLanguage}
+      {AppBarT && <Navigation />}
 
-        />} />
-        <Route path="/FlashCardsPage" element={<FlashCardsPage/>} />
+      <Routes>
+        <Route path="/" element={<HomePage cards={cards} />} />
+        <Route path="/AddFlashCardsPage" element={
+          <AddFlashCardsPage 
+            setSourceLanguage={setSourceLanguage}
+            setTargetLanguage={setTargetLanguage}
+            handleAddWord={handleAddWord}
+            newWord={newWord}
+            setNewWord={setNewWord}
+            sourceLanguage={sourceLanguage}
+            targetLanguage={targetLanguage}
+          />
+        } />
+        <Route path="/FlashCardsPage" element={
+          <FlashCardsPage
+            toggleTranslateVisibility={toggleTranslateVisibility}
+            showTranslate={showTranslate}
+            cards={cards}
+            setCards={setCards}
+          />
+        } />
         <Route path="/QuizPage" element={<QuizPage />} />
         <Route path="/progress" element={<Progress />} />
       </Routes>
-      <FlashCards
-                toggleTranslateVisibility={toggleTranslateVisibility}
-                showTranslate={showTranslate}
-                cards={cards}
-                setCards={setCards}
-              />
     </BrowserRouter>
-    
   );
 }
 

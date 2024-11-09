@@ -1,48 +1,80 @@
-import { Button, Paper, TextField } from "@mui/material"
+import { Button, Paper, TextField } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from "react";
 import { CardsType, Keytype } from "../App";
+import '../app.css'
 
- export type FlashCardsTypeProps = {
-toggleTranslateVisibility:(id:number)=>void
-cards: CardsType[]
-setCards:(cards:CardsType[])=>void
-showTranslate:Keytype
+export type FlashCardsTypeProps = {
+  toggleTranslateVisibility: (id: number) => void;
+  cards: CardsType[];
+  setCards: (cards: CardsType[]) => void;
+  showTranslate: Keytype;
+};
 
+const FlashCards: React.FC<FlashCardsTypeProps> = (props) => {
+  const [editId, setEditId] = useState<number | null>(null);
+  const [visible, setVisible] = useState<string>('');
+  const [flippedCards, setFlippedCards] = useState<Record<number, boolean>>({});
 
-}
+  const handleFlip = (id: number) => {
+    setFlippedCards((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
 
-function FlashCards(props: FlashCardsTypeProps){
-    const [editId, setEditId] = useState<number | null>(null);
-    const [visible, setVisible] = useState<string>('');
-    
-return<>
-
-{props.cards.map((tl) => (
-          <Paper elevation={24} className="card" key={tl.id}>
-            <ul>
+  return (
+    <>
+      {props.cards.map((tl) => (
+        <div  className="card-container" key={tl.id}>
+          <div className="card-container" onClick={() => handleFlip(tl.id)}>
+            <div className={`card ${flippedCards[tl.id] ? 'is-flipped' : ''}`}>
+              <div className="card-front">
               {editId === tl.id ? (
-               
-                <TextField
-                variant='standard'
-                id="standard-basic" label="Standard"
-                  type="text"
-                  value={visible}
-                  onChange={(e) => setVisible(e.target.value)}
-                  onBlur={() => setEditId(null)}
-                />
-               
-              ) : (
-                <li className='word' onDoubleClick={() => setEditId(tl.id)}>{tl.word}</li>
-              )}
+              <TextField
+                variant="standard"
+                label="Edit word"
+                type="text"
+                value={visible}
+                onChange={(e) => setVisible(e.target.value)}
+                onBlur={() => setEditId(null)}
+              />
+            ) : (
+              <h3 onDoubleClick={() => setEditId(tl.id)} >{tl.word}</h3>
+            )}
+                
+              </div>
+              <div className="card-back">
+                <h3>{tl.translate}</h3>
+              </div>
+              <Button
+            onClick={() =>
+              props.setCards(props.cards.filter((card) => card.id !== tl.id))
+            }
+            variant="text"
+            className="deleteIcon"
+          >
+            <DeleteIcon />
+          </Button>
+            </div>
+          </div>
+          <ul>
             
-              {props.showTranslate[tl.id] && <li className='word'>перевод:{tl.translate}</li>}
-            </ul>
-            <Button onClick={() => props.setCards(props.cards.filter((card) => card.id !== tl.id))} variant="text"> <DeleteIcon /></Button>
-            <Button onClick={() => props.toggleTranslateVisibility(tl.id) } variant="contained" >Show Translate</Button>
-          </Paper>
-        ))}
-</>
+            {/* {props.showTranslate[tl.id] && (
+              <li className="word">Перевод: {tl.translate}</li>
+            )} */}
+          </ul>
+       
+          {/* <Button
+            onClick={() => props.toggleTranslateVisibility(tl.id)}
+            variant="contained"
+          >
+            Show Translate
+          </Button> */}
+        </div>
+      ))}
+    </>
+  );
+};
 
-}
-export default FlashCards
+export default FlashCards;

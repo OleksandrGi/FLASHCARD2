@@ -5,20 +5,30 @@
 /.pnp
 .pnp.js
 
-
+*.log
 # testing
 /coverage
+.*/
 
 # production
 /build
 
 # misc
 .DS_Store
-
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+# Игнорировать папки node_modules и dist
+node_modules/
+dist/
+
+# Игнорировать все лог-файлы
+*.log
+
+# Игнорировать все файлы с расширением .env
+*.env
+
 
 npm-debug.log*
 yarn-debug.log*
