@@ -14,8 +14,20 @@
     border: none;
 
 }
-.card .deleteIcon{
-margin-top: 320px;
+
+.quiztest {
+    display: inline-block;
+    margin-left: 50px;
+    padding: 30px;
+    margin-top: 50px;
+    width: 200px;
+    height: 100px;
+    border: 1px solid #000;
+
+}
+
+.card .deleteIcon {
+    margin-top: 320px;
 }
 
 .word {
@@ -26,7 +38,7 @@ margin-top: 320px;
 
 .card-container {
     display: inline-block;
-    padding:100px;
+    padding: 100px;
     perspective: 1000px;
     /* Создаем перспективу */
     width: 200px;
