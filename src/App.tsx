@@ -13,6 +13,9 @@ import QuizPage from './pages/QuizPage';
 import Navigation from './components/nsvigation';
 import HomePage from './pages/HomePage';
 import TestSolvePage from './pages/TestSolvePage';
+import { LoginForm } from './components/loginForm';
+import { link } from 'fs';
+import { Link } from 'react-router-dom';
 
 export type CardsType = {
   id: number;
@@ -130,7 +133,9 @@ function App() {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               FlashCards
             </Typography>
-            <Button color="inherit">Login</Button>
+            <Link to="/Login">
+              <Button color="inherit">Login</Button>
+            </Link>
           </Toolbar>
         </AppBar>
       </Box>
@@ -168,6 +173,9 @@ function App() {
         <Route path="/testSolve" element={<TestSolvePage test={test}
         handleStartLearn={handleStartLearn}
         foundTest={selectedTest}
+        />} />
+
+        <Route path="/login" element={<LoginForm 
         />} />
 
       </Routes>
