@@ -12,6 +12,7 @@ function QuizPage(props: testTypeProps) {
   
     return (
         <>
+        <button>Add Test  +</button>
             {props.test.map((test) => (
                 <div className="quiztest" key={test.id}>
                     <h1>{test.title}</h1>

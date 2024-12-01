@@ -14,8 +14,11 @@ import Navigation from './components/nsvigation';
 import HomePage from './pages/HomePage';
 import TestSolvePage from './pages/TestSolvePage';
 import { LoginForm } from './components/loginForm';
-import { link } from 'fs';
 import { Link } from 'react-router-dom';
+import Account from './pages/Account';
+import { useDispatch, useSelector } from 'react-redux';
+import { GetTranslationAC } from './store/FlashCardReducer';
+import { AppRootState } from './store/store';
 
 export type CardsType = {
   id: number;
@@ -35,30 +38,15 @@ export type testType = {
   isDone:boolean
 
 }
-export type LanguageKey = 'English' | 'German' | 'Russian';
 
+export type LanguageKey = 'English' | 'German' | 'Russian';
+export type CardsStateType = {
+  [key: string]: CardsType;
+};
 function App() {
   const [test, setTest] = useState<testType[]>([ 
-    {id:1,title:'Test',training:'training 1',Questions:10, isDone:false},
-{id:2,title:'Test1',training:'training 2',Questions:15, isDone:false},
-{id:3,title:'Test2',training:'training 2',Questions:5, isDone:false},
-{id:4,title:'Test3',training:'training 3',Questions:40, isDone:false},
-{id:5,title:'Test4',training:'training 4',Questions:25, isDone:false},
-{id:6,title:'Test5',training:'training 5',Questions:31, isDone:false},
-{id:7,title:'Test6',training:'training 6',Questions:10, isDone:false},
-{id:8,title:'Test7',training:'training 7',Questions:5, isDone:false},
-{id:9,title:'Test8',training:'training 8',Questions:1, isDone:false},
-{id:10,title:'Test9',training:'training 9',Questions:90, isDone:false},
-{id:11,title:'Test10',training:'training 10',Questions:50, isDone:false},
-{id:12,title:'Test11',training:'training 11',Questions:20, isDone:false},
-{id:13,title:'Test12',training:'training 12',Questions:10, isDone:false},
-{id:14,title:'Test13',training:'training 13',Questions:90, isDone:false},
-{id:15,title:'Test14',training:'training 14',Questions:50, isDone:false},
-{id:16,title:'Test15',training:'training 15',Questions:15, isDone:false},
-{id:17,title:'Test16',training:'training 16',Questions:16, isDone:false},
-{id:18,title:'Test17',training:'training 17',Questions:17, isDone:false},
-{id:19,title:'Test18',training:'training 18',Questions:18, isDone:false},
-{id:20,title:'Test19',training:'training 19',Questions:12, isDone:false},])
+    {id:1,title:'Test',training:'training 1',Questions:5, isDone:false},
+])
   const [cards, setCards] = useState<Array<CardsType>>([
    
   ]);
@@ -75,17 +63,13 @@ function App() {
     German: languageGerman,
     Russian: languageRussian,
   };
+const dispatch =  useDispatch()
 
-  function getTranslation(word: string): string {
-    const sourceWords = languageMap[sourceLanguage][0].words;
-    const targetWords = languageMap[targetLanguage][0].words;
-
-    const wordObject = sourceWords.find((w) => w.word === word);
-    if (wordObject) {
-      const translatedWord = targetWords.find((t) => t.id === wordObject.id);
-      return translatedWord ? translatedWord.word : 'Translation not found';
-    }
-    return 'Word not found in source language';
+  function getTranslation(word: string) {
+    const translation = useSelector((state: AppRootState) =>
+  state.flashCards.find(card => card.word === newWord)?.translate || "Not translated"
+);
+   dispatch(GetTranslationAC(word, sourceLanguage, targetLanguage))
   }
 
   function handleAddWord() {
@@ -177,7 +161,10 @@ function App() {
 
         <Route path="/login" element={<LoginForm 
         />} />
+        
 
+        <Route path="/Account" element={<Account
+        />} />
       </Routes>
     </BrowserRouter>
   );

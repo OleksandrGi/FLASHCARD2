@@ -1,4 +1,4 @@
-import { Button, Paper, TextField } from "@mui/material";
+import { Button,  TextField } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from "react";
 import { CardsType, Keytype } from "../App";
@@ -58,19 +58,7 @@ const FlashCards: React.FC<FlashCardsTypeProps> = (props) => {
           </Button>
             </div>
           </div>
-          <ul>
-            
-            {/* {props.showTranslate[tl.id] && (
-              <li className="word">Перевод: {tl.translate}</li>
-            )} */}
-          </ul>
-       
-          {/* <Button
-            onClick={() => props.toggleTranslateVisibility(tl.id)}
-            variant="contained"
-          >
-            Show Translate
-          </Button> */}
+    
         </div>
       ))}
     </>

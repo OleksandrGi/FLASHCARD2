@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		},
+		{
+			"path": "../../../../Desktop/It-kamasutra to do list"
+		}
+	],
+	"settings": {
+		"git.ignoreLimitWarning": true
+	}
+}
