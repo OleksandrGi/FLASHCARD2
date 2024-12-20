@@ -1,7 +1,7 @@
-import { TextField } from "@mui/material";
-import { testType } from "../App";
+import { Button, TextField } from "@mui/material";
 import { useState } from "react";
-
+import { testType } from "../types";
+import '../app.css'
 type TestSolvePageProps = {
   test: testType[]; 
   foundTest: testType; 
@@ -10,11 +10,11 @@ type TestSolvePageProps = {
 type QuizWordsType ={
   word:string
 }
-function TestSolvePage({ test, foundTest, handleStartLearn }: TestSolvePageProps) {
+function TestSolvePage({ foundTest }: TestSolvePageProps) {
   let [QuestionON, setQuestionON] = useState<number>(0)
   let [index, setIndex] = useState<number>(0)
   let [InputQuiz, setInputQuiz] = useState<string>('')
-  let [QuizWords, setQuizWords] = useState<QuizWordsType[]>([
+  let [QuizWords,] = useState<QuizWordsType[]>([
     {word:''},
     {word:'hello'},
     {word:'world'},
@@ -46,17 +46,22 @@ function previousButton(){
 
   return (
     <>
-      <h1>{foundTest.title || "No Title"}</h1>
+   
       <div>
         
-        <p>What is the word meaning? {QuizWords[index].word}</p>
-        <TextField onChange={(event:React.ChangeEvent<HTMLInputElement>)=>setInputQuiz(event.currentTarget.value)} type="text" variant="outlined" placeholder="Your answer"  value={InputQuiz}/>
+        <p className="testSolveWordMean">What is word will be in Russian</p>
+        <div className="testSolveWord">{QuizWords[index].word}</div>
+        <div className="inputAnswer">
+        <TextField onChange={(event:React.ChangeEvent<HTMLInputElement>)=>setInputQuiz(event.currentTarget.value)} type="text" variant="outlined" placeholder="Your answer"   value={InputQuiz}/>
+        </div>
         <br />
-        <button onClick={nextButton}> next Question</button>
-        <button onClick={previousButton}> previous Question</button>
-        <button onClick={Quiz }>Submit the answer</button>
+     <div className="ButtonsTest">
+     <Button className="ButtonsTestB" variant='contained' onClick={nextButton}> next Question</Button>
+        <Button className="ButtonsTestB" variant='contained' onClick={previousButton}> previous Question</Button>
+        <Button className="ButtonsTestB" variant='contained' onClick={Quiz }>Submit the answer</Button>
+     </div>
       </div>
-      <div>
+      <div className="questions">
       questions: <span >{QuestionON }</span>/{foundTest.Questions}
       </div>
     </>

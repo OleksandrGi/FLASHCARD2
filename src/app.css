@@ -2,7 +2,7 @@
     list-style: none;
     margin: 0;
 
-  
+
 
 }
 
@@ -36,16 +36,7 @@ body {
 
 }
 
-.quiztest {
-    display: inline-block;
-    margin-left: 50px;
-    padding: 30px;
-    margin-top: 50px;
-    width: 200px;
-    height: 100px;
-    border: 1px solid #000;
 
-}
 
 .card .deleteIcon {
     margin-top: 320px;
@@ -79,6 +70,118 @@ body {
 .card.is-flipped {
     transform: rotateY(180deg);
     /* Переворачиваем */
+}
+
+.DIV_Quiz {
+    text-align: center;
+
+}
+
+.h1_Quiz {
+    color: #fff;
+    text-decoration: none;
+
+}
+
+.description {
+    color: #e4d2f4;
+    font-size: 1.5em;
+
+}
+
+.link {
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.test {
+    display: flex;
+    flex-wrap: wrap;
+    width: 1000px;
+    height: 900px;
+
+    margin-left: 25%;
+
+}
+
+.Paragrath {
+    margin-left: 20%;
+    font-size: 2em;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 800;
+    color: #fff;
+}
+
+.ButtonsTest {
+    width: 120px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    float: right;
+    margin-top: 33%;
+
+}
+
+.ButtonsTest .ButtonsTestB {
+    margin: 5px;
+    padding-right: 30px;
+}
+
+.testSolveWord {
+    width: 800px;
+    height: 400px;
+    position: absolute;
+    left: 25%;
+    top: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3em;
+    text-transform: capitalize;
+    border-radius: 2%;
+    color: #fff;
+    border: 3px solid #fff;
+
+}
+
+.inputAnswer {
+    position: absolute;
+    margin-top: 32%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: 45%;
+    padding-right: 120px;
+}
+
+.questions {
+    float: right;
+}
+
+.testSolveWordMean {
+    display: flex;
+    justify-self: center;
+    font-size: 2em;
+
+}
+
+.quiztest {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 250px;
+    height: 200px;
+    border-radius: 20px;
+    background: linear-gradient(#98e664, #eef681);
+    border: 2px solid #fff;
+    color: rgb(232, 97, 97);
+    font-weight: 800;
+    margin-right: 10px;
+    letter-spacing: 2px;
+    text-transform: capitalize;
 }
 
 .card-front,

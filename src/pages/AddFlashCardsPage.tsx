@@ -1,7 +1,8 @@
 import { Button, MenuItem, Select, TextField } from "@mui/material"
-import { CardsType, LanguageKey } from "../App"
+
 
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import { LanguageKey } from "../types";
 
 type  AddFlashCardsPageType = {
   setSourceLanguage:(value:LanguageKey)=>void

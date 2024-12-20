@@ -2,9 +2,12 @@ import { combineReducers, createStore } from "redux";
 import { FlashCardReducer } from "./FlashCardReducer";
 
 
-export const Store = createStore(FlashCardReducer)
 
-export type AppRootState = ReturnType<typeof FlashCardReducer>;
+const rootReducer = combineReducers({
+    flashCards: FlashCardReducer, // <- это "flashCards"
+  });
+  export const Store = createStore(rootReducer)
+export type AppRootState = ReturnType<typeof rootReducer>;
 
 //@ts-ignore
 window.store = Store;

@@ -1,9 +1,8 @@
-
-import React from 'react';
 import { Box, Typography, Button, Card, CardContent, CircularProgress } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { Category, languageEnglish } from '../words';
-import { CardsType } from '../App';
+import { Category} from '../words';
+import { CardsType } from '../types';
+
 type  MainPageType ={
     cards:CardsType[]
 }

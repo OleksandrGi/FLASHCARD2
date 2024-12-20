@@ -1,25 +1,23 @@
 
-import { CardsType, Keytype } from "../App"
+
 import FlashCards from "../components/flashcard"
+import { CardsType, Keytype } from "../types"
 
 
 type  FlashCardsPageTYPE = {
   toggleTranslateVisibility:(id:number)=> void
-  showTranslate:Keytype
+
   cards: CardsType[]
-  setCards:(cards:CardsType[])=>void
+  
 
 }
 
 function FlashCardsPage(props:FlashCardsPageTYPE){
     return <>
   <FlashCards
-                toggleTranslateVisibility={props.toggleTranslateVisibility}
-                showTranslate={props.showTranslate}
-                cards={props.cards}
-                setCards={props.setCards}
-              />
-    
+        toggleTranslateVisibility={props.toggleTranslateVisibility}
+        cards={props.cards}
+      />
               </>
     }
     export default FlashCardsPage

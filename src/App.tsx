@@ -1,11 +1,9 @@
-import { useState } from 'react';
 import './app.css';
-import {  languageEnglish, languageGerman, languageRussian } from './words';
 import Button from "@mui/material/Button";
-import { AppBar, Box, IconButton,  Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import '@fontsource/roboto/400.css';
-import {  BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Progress from './pages/progress';
 import AddFlashCardsPage from './pages/AddFlashCardsPage';
 import FlashCardsPage from './pages/FlashCardsPage';
@@ -14,96 +12,92 @@ import Navigation from './components/nsvigation';
 import HomePage from './pages/HomePage';
 import TestSolvePage from './pages/TestSolvePage';
 import { LoginForm } from './components/loginForm';
-import { Link } from 'react-router-dom';
 import Account from './pages/Account';
 import { useDispatch, useSelector } from 'react-redux';
-import { GetTranslationAC } from './store/FlashCardReducer';
+import {  GetTranslationAC, TRANSLATION_FUNCTION_AC, ToggleTranslateAC } from './store/FlashCardReducer';
 import { AppRootState } from './store/store';
+import { LanguageKey, testType } from './types';
+import { useState } from 'react';
+import { languageEnglish, languageGerman, languageRussian } from './words';
 
-export type CardsType = {
-  id: number;
-  word: string;
-  translate: string;
-  learned: boolean;
-  category: string;
-};
-export type Keytype = {
-  [key: number]: boolean;
-};
-export type testType = {
-  id:number,
-  title:string,
-  training:string,
-  Questions:number,
-  isDone:boolean
-
-}
-
-export type LanguageKey = 'English' | 'German' | 'Russian';
-export type CardsStateType = {
-  [key: string]: CardsType;
-};
 function App() {
-  const [test, setTest] = useState<testType[]>([ 
-    {id:1,title:'Test',training:'training 1',Questions:5, isDone:false},
-])
-  const [cards, setCards] = useState<Array<CardsType>>([
-   
+  const dispatch = useDispatch();
+  const cards = useSelector((state: AppRootState) => state.flashCards);
+
+  const translations = useSelector((state: AppRootState) => state.flashCards);
+
+  const [test, setTest] = useState<testType[]>([
+    { id: 1, title: 'Test', training: 'training 1 Test', Questions: 5, isDone: false },
+    { id: 2, title: 'Test', training: 'training 1 Learn', Questions: 5, isDone: false },
+    { id: 3, title: 'Test', training: 'training 1', Questions: 5, isDone: false },
+    { id: 4, title: 'Test', training: 'training 1', Questions: 5, isDone: false },
+    { id: 5, title: 'Test', training: 'training 1', Questions: 5, isDone: false },
+    { id: 6, title: 'Test', training: 'training 1', Questions: 5, isDone: false },
+    { id: 7, title: 'Test', training: 'training 1', Questions: 5, isDone: false },
+    { id: 8, title: 'Test', training: 'training 1', Questions: 5, isDone: false },
+    { id: 9, title: 'Test', training: 'training 1', Questions: 5, isDone: false },
+    { id: 10, title: 'Test', training: 'training 1', Questions: 5, isDone: false },
+    { id: 11, title: 'Test', training: 'training 1', Questions: 5, isDone: false },
+    { id: 12, title: 'Test', training: 'training 1', Questions: 5, isDone: false },
   ]);
+
   const [newWord, setNewWord] = useState<string>('');
   const [sourceLanguage, setSourceLanguage] = useState<LanguageKey>('English');
   const [targetLanguage, setTargetLanguage] = useState<LanguageKey>('Russian');
-  const [newCardCategory, setNewCardCategory] = useState<string>('Basic'); 
-  const [showTranslate, setShowTranslate] = useState<Keytype>({});
+  const [newCardCategory, setNewCardCategory] = useState<string>('Basic');
   const [AppBarT, setAppBarT] = useState<boolean>(false);
+  const [selectedTest, setSelectedTest] = useState<testType | any>();
 
-
-  const languageMap: Record<LanguageKey, { words: { id: number; word: string }[] }[]> = {
-    English: languageEnglish,
-    German: languageGerman,
-    Russian: languageRussian,
+  const getTranslation = (word: string) => {
+    dispatch(GetTranslationAC(word, sourceLanguage, targetLanguage));
+    const card = translations.find((card) => card.word === word);
+    return card?.translate || 'Not translated';
   };
-const dispatch =  useDispatch()
 
-  function getTranslation(word: string) {
-    const translation = useSelector((state: AppRootState) =>
-  state.flashCards.find(card => card.word === newWord)?.translate || "Not translated"
-);
-   dispatch(GetTranslationAC(word, sourceLanguage, targetLanguage))
-  }
-
-  function handleAddWord() {
+  const handleAddWord = () => {
     if (!newWord) {
       alert('Введите слово для перевода');
       return;
     }
-    const translation = getTranslation(newWord);
-    const newCard = {
-      id: cards.length + 1,
-      word: newWord,
-      translate: translation,
-      learned: true,
-      category: newCardCategory
+  
+    const languageMap: Record<LanguageKey, { words: { id: number; word: string }[] }[]> = {
+      English: languageEnglish,
+      German: languageGerman,
+      Russian: languageRussian,
     };
-    setCards([...cards, newCard]);
+  
+    const sourceWords = languageMap[sourceLanguage][0].words;
+    const targetWords = languageMap[targetLanguage][0].words;
+  
+    const wordObject = sourceWords.find((w) => w.word === newWord);
+    const translation =
+      wordObject && targetWords.find((t) => t.id === wordObject.id)?.word
+        ? targetWords.find((t) => t.id === wordObject.id)?.word
+        : "Translation not found";
+  
+    
+    dispatch(
+      TRANSLATION_FUNCTION_AC(
+        Date.now(),
+        newWord,
+        translation || "Translation not found",
+        false, //learned
+        newCardCategory,
+        false 
+      )
+    );
+  
     setNewWord('');
-  }
-
+  };
   const toggleTranslateVisibility = (id: number) => {
-    setShowTranslate((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
+    dispatch(ToggleTranslateAC(id));
   };
 
-  function changeTarget() {
-    setAppBarT((state) => !state);
-  }
-  const [selectedTest, setSelectedTest] = useState<testType | any>();
+  const changeTarget = () => setAppBarT((prev) => !prev);
 
   const handleStartLearn = (id: number) => {
     const foundTest = test.find((test) => test.id === id);
-    setSelectedTest(foundTest);
+    setSelectedTest(foundTest );
   };
 
   return (
@@ -125,7 +119,7 @@ const dispatch =  useDispatch()
       </Box>
 
       {AppBarT && <Navigation />}
-      
+
       <Routes>
         <Route path="/" element={<HomePage cards={cards} />} />
         <Route path="/AddFlashCardsPage" element={
@@ -142,29 +136,26 @@ const dispatch =  useDispatch()
         <Route path="/FlashCardsPage" element={
           <FlashCardsPage
             toggleTranslateVisibility={toggleTranslateVisibility}
-            showTranslate={showTranslate}
             cards={cards}
-            setCards={setCards}
           />
         } />
-        <Route path="/QuizPage" element={<QuizPage 
-        test={test}
-        setTest={setTest}
-        handleStartLearn={handleStartLearn}/>
-     
+        <Route path="/QuizPage" element={
+          <QuizPage 
+            test={test}
+            setTest={setTest}
+            handleStartLearn={handleStartLearn}
+          />
         } />
         <Route path="/progress" element={<Progress />} />
-        <Route path="/testSolve" element={<TestSolvePage test={test}
-        handleStartLearn={handleStartLearn}
-        foundTest={selectedTest}
-        />} />
-
-        <Route path="/login" element={<LoginForm 
-        />} />
-        
-
-        <Route path="/Account" element={<Account
-        />} />
+        <Route path="/testSolve" element={
+          <TestSolvePage 
+            test={test}
+            handleStartLearn={handleStartLearn}
+            foundTest={selectedTest}
+          />
+        } />
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/Account" element={<Account />} />
       </Routes>
     </BrowserRouter>
   );

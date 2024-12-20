@@ -1,24 +1,46 @@
-function Account() {
-return<>
-<div>
-    <img src="" alt="your IMG" />
-<span>Name</span> <p>Oleksandr</p>
-<span> Last Name</span> <p>Borysenko</p>
-<span>daily goal</span>
-<p>daily work hours goal </p>
-<em>your email:nincisncew@gmail.com</em>
-your password <input type="text " value={12345678}/>
-<p>your progress</p>
-<div>
-<p>your last added cards:
+import React, { ChangeEvent, useState } from "react";
 
-</p>
-<div>hello</div>
-<div>beaver</div>
-<div>world</div>
-<div>sheep</div>
-</div>
-</div>
-</>
-}
-export default Account
+const Account = () => {
+  const [image, setImage] = useState<string | null>(null);
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  return (
+    <>
+      <div>
+        <div>
+          <input type="file" accept="image/*" onChange={handleFileChange} />
+          {image && <img src={image} alt="Uploaded" style={{ maxWidth: "200px" }} />}
+        </div>
+        <span>Name</span>
+        <p>Oleksandr</p>
+        <span>Last Name</span>
+        <p>Borysenko</p>
+        <span>Daily Goal</span>
+        <p>Daily Work Hours Goal</p>
+        <em>Your email: nincisncew@gmail.com</em>
+        <p>Your password:</p>
+        <input type="password" value="12345678" readOnly />
+        <p>Your progress:</p>
+        <div>
+          <p>Your last added cards:</p>
+          <div>hello</div>
+          <div>beaver</div>
+          <div>world</div>
+          <div>sheep</div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Account;
